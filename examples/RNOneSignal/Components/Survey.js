@@ -28,6 +28,8 @@ import {
     Icon,
     Picker,
     Button,
+    Footer,
+    FooterTab,
     CheckBox,
     Radio,
     Right,
@@ -43,8 +45,7 @@ import OneSignal from 'react-native-onesignal'
 
 import Thanks from './Thanks'
 
-
-let imageUri = 'https://cdn-images-1.medium.com/max/300/1*7xHdCFeYfD8zrIivMiQcCQ.png'
+const RequiredFieldIndicator = () => <Text style={{color: 'red'}}>*</Text>
 
 
 export default class RNOneSignal extends Component {
@@ -57,6 +58,7 @@ export default class RNOneSignal extends Component {
         answered: false,
         selectedWillingnessNow: undefined,
         selectedWillingnessFuture: undefined,
+        selectedMood: undefined,
     }
 
     willingnessNowChange = (value) => {
@@ -67,6 +69,11 @@ export default class RNOneSignal extends Component {
     willingnessFutureChange = (value) => {
         console.log('selectedWillingnessFuture', value)
         this.setState({ selectedWillingnessFuture: value })
+    }
+
+    moodChange = (value) => {
+        console.log('mood', value)
+        this.setState({ selectedMood: value })
     }
 
     // validateEmail(email) {
@@ -197,6 +204,38 @@ export default class RNOneSignal extends Component {
 
                     <KeyboardAvoidingView style={{marginTop: 0, marginBottom: 32}}>
 
+                      <ListItem>
+                          <Text>What is your current <Text style={{fontWeight: 'bold'}}>mood</Text>?</Text>
+                          <RequiredFieldIndicator />
+                      </ListItem>
+                      <ListItem>
+                          <Picker
+                              mode="dropdown"
+                              iosIcon={<Icon name="ios-arrow-down-outline" />}
+                              placeholder="Select your mood"
+                              placeholderStyle={{ color: "#bfc6ea" }}
+                              placeholderIconColor="#007aff"
+                              style={{
+                                width: undefined,
+                                color: this.state.selectedMood > 0 ? '#000000' : '#FF0000',
+                              }}
+                              selectedValue={this.state.selectedMood}
+                              onValueChange={this.moodChange}
+                          >
+                              {/* Affect dimensions by Russell 1980 */}
+                              <Picker.Item label="Select" value="0" />
+                              <Picker.Item label="Pleasure" value="1" />
+                              <Picker.Item label="Excitement" value="2" />
+                              <Picker.Item label="Arousal" value="3" />
+                              <Picker.Item label="Distress" value="4" />
+                              <Picker.Item label="Displeasure" value="5" />
+                              <Picker.Item label="Depression" value="6" />
+                              <Picker.Item label="Sleepiness" value="7" />
+                              <Picker.Item label="Relaxation" value="8" />
+                          </Picker>
+                      </ListItem>
+
+
 {/*
                         <ListItem>
                           <Text>Please complete the following microtask:</Text>
@@ -229,13 +268,14 @@ export default class RNOneSignal extends Component {
                               <Radio selected={!this.state.gainz} />
                             </Right>
                           </ListItem>
-
 */}
+
 
                         <Form>
 
                           <ListItem>
                               <Text>What is your willingness to work on a microtask <Text style={{fontWeight: 'bold'}}>at this moment</Text>?</Text>
+                             <RequiredFieldIndicator />
                           </ListItem>
                           <ListItem>
                               <Picker
@@ -261,18 +301,19 @@ export default class RNOneSignal extends Component {
                           </ListItem>
 
                           <ListItem>
-                              <Text>What is your willingness to work on a microtask <Text style={{fontWeight: 'bold'}}>in 10 minutes</Text>?</Text>
+                              <Text>What is your willingness to work on a microtask <Text style={{fontWeight: 'bold'}}>10 minutes from now</Text>?</Text>
+                              <RequiredFieldIndicator />
                           </ListItem>
 
                           <ListItem>
-                                <Rating
-                                  type="star"
-                                  fractions={0}
-                                  startingValue={0}
-                                  imageSize={30}
-                                  onFinishRating={this.ratingCompleted}
-                                  style={{ marginBottom: 0 }}
-                                />
+                            <Rating
+                              type="star"
+                              fractions={0}
+                              startingValue={0}
+                              imageSize={30}
+                              onFinishRating={this.ratingCompleted}
+                              style={{ marginBottom: 0 }}
+                            />
                           </ListItem>
 
                           <ListItem
@@ -288,6 +329,17 @@ export default class RNOneSignal extends Component {
                         </Form>
 
                     </KeyboardAvoidingView>
+
+
+                    <Footer style={{backgroundColor: '#FFFFFF'}}>
+                        <View>
+                            <Text style={{color: 'red'}}>
+                                * required
+                            </Text>
+                        </View>
+                    </Footer>
+
+
 
                     <View>
                       <Button
@@ -307,6 +359,7 @@ export default class RNOneSignal extends Component {
                         />
                       */}
                     </View>
+
 
                     {/*
                     <View style={styles.buttonContainer}>
