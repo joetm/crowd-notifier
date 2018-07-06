@@ -94,7 +94,8 @@ export default class RNOneSignal extends Component {
 
         OneSignal.setRequiresUserPrivacyConsent(requiresConsent)
 
-        OneSignal.init("<ONESIGNALKEY>", {kOSSettingsKeyAutoPrompt : true})
+        const ONESIGNAL_API_KEY = process.env.REACT_APP_ONESIGNAL_API_KEY
+        OneSignal.init(ONESIGNAL_API_KEY, {kOSSettingsKeyAutoPrompt : true})
 
         var providedConsent = await OneSignal.userProvidedPrivacyConsent()
 
